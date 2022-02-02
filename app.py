@@ -1,6 +1,8 @@
 """Blogly application."""
 
+from models import User
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 from models import db, connect_db
 
 app = Flask(__name__)
