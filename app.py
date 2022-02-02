@@ -12,3 +12,17 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
 db.create_all()
+
+
+@app.get('/')
+def direct_to_users():
+    """Directs to the /users page"""
+
+    return redirect('/users')
+
+
+@app.get('/users')
+def show_all_users():
+    """shows all the users"""
+
+    return render_template("base.html")
