@@ -37,9 +37,11 @@ class UserViewTestCase(TestCase):
             last_name="test_last",
             image_url=None)
 
-        # clean up lines here
-        second_user = User(first_name="test_first_two", last_name="test_last_two",
-                           image_url=None)
+        second_user = User(
+            first_name="test_first_two",
+            last_name="test_last_two",
+            image_url=None
+            )
 
         db.session.add_all([test_user, second_user])
         db.session.commit()
@@ -79,9 +81,14 @@ class UserViewTestCase(TestCase):
         image_url = 'https://2.bp.blogspot.com/-L-0e2jsHy1I/T1Wmt52vCDI/AAAAAAAAC2A/i5fncCyOFSE/s400/dicktracyflattop.jpg'
 
         with self.client as c:
-            # line length
             post = c.post(
-                '/users/new', data={'first_name': first_name, 'last_name': last_name, 'image_url': image_url})
+                '/users/new',
+                data={
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'image_url': image_url}
+                    )
+
             self.assertEquals(post.status_code, 302)
 
         user = User.query.filter(User.first_name == 'disguy').first()
@@ -94,8 +101,8 @@ class UserViewTestCase(TestCase):
         with self.client as c:
             resp = c.get(f"users/{self.user_id}")
             html = resp.get_data(as_text=True)
-            # close h1
-            self.assertIn('<h1>test_first', html)
+
+            self.assertIn('test_first</h1>', html)
 
     def test_edit_form_filled(self):
         """Does the edit page come pre-populated with the user server data?"""
@@ -103,7 +110,7 @@ class UserViewTestCase(TestCase):
         with self.client as c:
             resp = c.get(f"users/{self.user_id}/edit")
             html = resp.get_data(as_text=True)
-            # fragile tests below
-            self.assertIn('name="first_name"\n\t\t\tvalue="test_first"', html)
-            self.assertIn('name="last_name"\n\t\t\tvalue="test_last"', html)
-            self.assertIn('name="image_url"\n\t\t\tvalue="None"', html)
+
+            self.assertIn('value="test_first"', html)
+            self.assertIn('value="test_last"', html)
+            self.assertIn('value="None"', html)
