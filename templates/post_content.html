@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block htmltitle %} Blogly - {{user.first_name}}
+{{user.last_name}} {% endblock %} {%block content %}
+<div class="row">
+	<div class="col-12">
+		<div>
+			<h1>{{post.title}}</h1>
+		</div>
+		<div>
+			{{post.content}}
+			<p class="author">
+				<span class="author-name"
+					>By {{post.author.get_full_name()}}</span
+				>
+			</p>
+		</div>
+		<div>
+			<form method="post">
+				<a class="btn btn-outline-primary" href="/users/{{user.id}}"
+					>Cancel</a
+				>
+				<button class="btn-primary" formaction="/posts/{{id}}/edit">
+					Edit
+				</button>
+				<button class="btn-danger" formaction="/posts/{{id}}/delete">
+					Delete
+				</button>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

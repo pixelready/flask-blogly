@@ -128,3 +128,10 @@ def create_post_and_redirect(id):
     db.session.commit()
 
     return redirect(f'/users/{id}')
+
+@app.get('/posts/<int:id>')
+def show_post(id):
+    """Show an individual post"""
+
+    post = Post.query.get(id)
+    return render_template('post_content.html', post=post)
