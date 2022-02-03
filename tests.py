@@ -41,7 +41,7 @@ class UserViewTestCase(TestCase):
             first_name="test_first_two",
             last_name="test_last_two",
             image_url=None
-            )
+        )
 
         db.session.add_all([test_user, second_user])
         db.session.commit()
@@ -87,7 +87,7 @@ class UserViewTestCase(TestCase):
                     'first_name': first_name,
                     'last_name': last_name,
                     'image_url': image_url}
-                    )
+            )
 
             self.assertEquals(post.status_code, 302)
 

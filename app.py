@@ -1,9 +1,10 @@
 """Blogly application."""
 
-from models import User
+from models import User, Post
 from flask import Flask, redirect, render_template, request
 from models import db, connect_db
 from flask_debugtoolbar import DebugToolbarExtension
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
@@ -17,6 +18,7 @@ connect_db(app)
 db.create_all()
 
 ### User Routes ###############################################################
+
 
 @app.get('/')
 def direct_to_users():
@@ -103,8 +105,26 @@ def delete_user_record(id):
 
 ### Post Routes ###############################################################
 
+
 @app.get('/users/<int:id>/posts/new')
 def show_new_post_form(id):
     """Show the new post form for the specified user"""
 
-    return render_template('new_post.html', id = id)
+    user = User.query.get(id)
+    return render_template('new_post.html', user=user)
+
+
+@app.post('/users/<int:id>/posts/new')
+def create_post_and_redirect(id):
+    """Create the post and redirect to the user detail page"""
+
+    form_data = request.form
+
+    title = form_data['title']
+    content = form_data['content']
+    user_id = id
+
+    Post.create_new_post(title, content, user_id)
+    db.session.commit()
+
+    return redirect(f'/users/{id}')
