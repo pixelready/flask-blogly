@@ -102,7 +102,7 @@ class UserViewTestCase(TestCase):
             resp = c.get(f"users/{self.user_id}")
             html = resp.get_data(as_text=True)
 
-            self.assertIn('test_first</h1>', html)
+            self.assertIn('test_last</h1>', html)
 
     def test_edit_form_filled(self):
         """Does the edit page come pre-populated with the user server data?"""

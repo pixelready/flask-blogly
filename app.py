@@ -121,13 +121,14 @@ def create_post_and_redirect(id):
     form_data = request.form
 
     title = form_data['title']
-    content = form_data['content']
+    post_content = form_data['post_content']
     user_id = id
 
-    Post.create_new_post(title, content, user_id)
+    Post.create_new_post(title, post_content, user_id)
     db.session.commit()
 
     return redirect(f'/users/{id}')
+
 
 @app.get('/posts/<int:id>')
 def show_post(id):
@@ -135,3 +136,18 @@ def show_post(id):
 
     post = Post.query.get(id)
     return render_template('post_content.html', post=post)
+
+
+@app.post('/posts/<int:id>/edit')
+def edit_post_and_redirect(id):
+    """Edit the selected post and redirect to the selected user detail page"""
+
+    post = Post.query.get(id)
+
+    form_data = request.form
+    post.title = form_data['title']
+    post.post_content = form_data['post_content']
+
+    db.session.commit()
+
+    return redirect(f'/user/{post.user_id}')

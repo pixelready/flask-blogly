@@ -36,7 +36,7 @@ class User(db.Model):
             image_url=image)
 
         db.session.add(new_user)
-    
+
     def get_full_name(self):
         """return the full name as a string"""
 
@@ -50,16 +50,17 @@ class Post(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(150), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    post_content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     author = db.relationship('User', backref='posts')
 
     @classmethod
-    def create_new_post(cls, title, content, user_id):
+    def create_new_post(cls, title, post_content, user_id):
         """Create a new post and add to current transaction"""
 
-        new_post = Post(title=title, content=content, user_id=user_id)
+        new_post = Post(title=title, post_content=post_content,
+                        user_id=user_id)
 
         db.session.add(new_post)
