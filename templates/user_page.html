@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block htmltitle %}
+Blogly - {{user.first_name}} {{user.last_name}}
+{% endblock %}
+
+{%block title %}
+{{user.first_name}} {{user.last_name}}
+{% endblock %}
+
+{%block content %}
+<div class='row'>
+    <div class="col-2">
+        <img src={{user.image_url}}>
+    </div>
+    <div class="col-10">
+        <div>
+            {{user.first_name}} {{user.last_name}}
+        </div>
+        <div>
+            <button>Edit</button>
+            <button>Delete</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
