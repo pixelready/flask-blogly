@@ -1,0 +1,35 @@
+{% extends 'base.html' %} {% block htmltitle %}Blogly - Create User {% endblock
+%} {% block content %}
+<h1>Edit a user</h1>
+<form action="/users/{{user.id}}/edit" method="post">
+	<label class="form-label" for="first_name">First Name</label>
+	<div class="input-group mb-3">
+		<input
+			class="form-control"
+			type="text"
+			name="first_name"
+			value="{{user.first_name}}"
+		/>
+	</div>
+	<label class="form-label" for="last_name">Last Name</label>
+	<div class="input-group mb-3">
+		<input
+			class="form-control"
+			type="text"
+			name="last_name"
+			value="{{user.last_name}}"
+		/>
+	</div>
+	<label class="form-label" for="image_url">Image URL</label>
+	<div class="input-group mb-3">
+		<input
+			class="form-control"
+			type="text"
+			name="image_url"
+			value="{{user.image_url}}"
+		/>
+	</div>
+	<a href="/users/{{user.id}}" class="btn btn-outline-info">Cancel</a>
+	<button class="btn btn-success" type="submit">Save</button>
+</form>
+{% endblock %}

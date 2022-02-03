@@ -4,11 +4,15 @@ from models import User
 from flask import Flask, redirect, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from models import db, connect_db
+from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
+app.config["SECRET_KEY"] = 'jomamma'
+toolbar = DebugToolbarExtension(app)
+
 
 connect_db(app)
 db.create_all()
@@ -64,3 +68,26 @@ def show_selected_user_page(id):
     user = User.query.get(id)
 
     return render_template('user_page.html', user=user)
+
+@app.get('/users/<int:id>/edit')
+def show_edit_selected_user_form(id):
+    """Show a form to edit the selected user."""
+
+    user = User.query.get(id)
+
+    return render_template('edit_user.html', user=user)
+
+@app.post('/users/<int:id>/edit')
+def update_user_record(id):
+    """Save update to user record from user edit form."""
+
+    user = User.query.get(id)
+
+    response = request.form
+    user.first_name = response.get('first_name')
+    user.last_name = response.get('last_name')
+    user.image_url = response.get('image_url')
+
+    db.session.commit()
+
+    return redirect(f'/users/{id}')
