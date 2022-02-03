@@ -69,6 +69,7 @@ def show_selected_user_page(id):
 
     return render_template('user_page.html', user=user)
 
+
 @app.get('/users/<int:id>/edit')
 def show_edit_selected_user_form(id):
     """Show a form to edit the selected user."""
@@ -76,6 +77,7 @@ def show_edit_selected_user_form(id):
     user = User.query.get(id)
 
     return render_template('edit_user.html', user=user)
+
 
 @app.post('/users/<int:id>/edit')
 def update_user_record(id):
@@ -91,3 +93,13 @@ def update_user_record(id):
     db.session.commit()
 
     return redirect(f'/users/{id}')
+
+
+@app.get('/users/<int:id>/delete')
+def delete_user_record(id):
+    """Delete the user record from the user page"""
+
+    User.query.filter(User.id == id).delete()
+    db.session.commit()
+
+    return redirect('/users')

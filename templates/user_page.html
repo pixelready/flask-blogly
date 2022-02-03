@@ -1,17 +1,17 @@
 {% extends 'base.html' %} {% block htmltitle %} Blogly - {{user.first_name}}
 {{user.last_name}} {% endblock %} {%block content %}
 <div class="row">
-	<div class="col-2">
-		<img class="img-fluid" src="{{user.image_url}}" />
-	</div>
-	<div class="col-10">
-		<div>
-			<h1>{{user.first_name}} {{user.last_name}}</h1>
-		</div>
-		<div>
-			<a href="/users/{{user.id}}/edit" class="btn btn-primary"> Edit </a>
-			<a class="btn btn-danger">Delete</a>
-		</div>
-	</div>
+    <div class="col-2">
+        <img class="img-fluid" src="{{user.image_url}}" />
+    </div>
+    <div class="col-10">
+        <div>
+            <h1>{{user.first_name}} {{user.last_name}}</h1>
+        </div>
+        <div>
+            <a href="/users/{{user.id}}/edit" class="btn btn-primary"> Edit </a>
+            <a href="/users/{{user.id}}/delete" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
 </div>
 {% endblock %}
