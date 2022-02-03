@@ -20,3 +20,6 @@ class User(db.Model):
     last_name = db.Column(db.String(50), nullable=False, unique=False)
     image_url = db.Column(db.String, unique=False)
 
+    @classmethod
+    def get_users(cls):
+        return User.query.all()
