@@ -18,6 +18,7 @@ app.config['DEBUG_TB_HOSTS'] = ['dont-show-debug-toolbar']
 
 db.create_all()
 
+
 class UserViewTestCase(TestCase):
     """Test views for users."""
 
@@ -25,26 +26,28 @@ class UserViewTestCase(TestCase):
         """Create test client, add sample data."""
 
         # As you add more models later in the exercise, you'll want to delete
-        # all of their records before each test just as we're doing with the 
+        # all of their records before each test just as we're doing with the
         # User model below.
         User.query.delete()
 
         self.client = app.test_client()
 
-        test_user = User(first_name="test_first",
-                                    last_name="test_last",
-                                    image_url=None)
+        test_user = User(
+            first_name="test_first",
+            last_name="test_last",
+            image_url=None)
 
+        # clean up lines here
         second_user = User(first_name="test_first_two", last_name="test_last_two",
                            image_url=None)
 
         db.session.add_all([test_user, second_user])
         db.session.commit()
 
-        # We can hold onto our test_user's id by attaching it to self (which is 
-        # accessible throughout this test class). This way, we'll be able to 
-        # rely on this user in our tests without needing to know the numeric 
-        # value of their id, since it will change each time our tests are run. 
+        # We can hold onto our test_user's id by attaching it to self (which is
+        # accessible throughout this test class). This way, we'll be able to
+        # rely on this user in our tests without needing to know the numeric
+        # value of their id, since it will change each time our tests are run.
         self.user_id = test_user.id
 
     def tearDown(self):
@@ -76,7 +79,9 @@ class UserViewTestCase(TestCase):
         image_url = 'https://2.bp.blogspot.com/-L-0e2jsHy1I/T1Wmt52vCDI/AAAAAAAAC2A/i5fncCyOFSE/s400/dicktracyflattop.jpg'
 
         with self.client as c:
-            post = c.post('/users/new', data={'first_name':first_name,'last_name':last_name, 'image_url':image_url})
+            # line length
+            post = c.post(
+                '/users/new', data={'first_name': first_name, 'last_name': last_name, 'image_url': image_url})
             self.assertEquals(post.status_code, 302)
 
         user = User.query.filter(User.first_name == 'disguy').first()
@@ -89,6 +94,7 @@ class UserViewTestCase(TestCase):
         with self.client as c:
             resp = c.get(f"users/{self.user_id}")
             html = resp.get_data(as_text=True)
+            # close h1
             self.assertIn('<h1>test_first', html)
 
     def test_edit_form_filled(self):
@@ -97,7 +103,7 @@ class UserViewTestCase(TestCase):
         with self.client as c:
             resp = c.get(f"users/{self.user_id}/edit")
             html = resp.get_data(as_text=True)
+            # fragile tests below
             self.assertIn('name="first_name"\n\t\t\tvalue="test_first"', html)
             self.assertIn('name="last_name"\n\t\t\tvalue="test_last"', html)
             self.assertIn('name="image_url"\n\t\t\tvalue="None"', html)
-

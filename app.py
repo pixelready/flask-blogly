@@ -16,14 +16,20 @@ toolbar = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
-def create_new_user(fname,lname,image):
-        new_user = User(
-            first_name=fname,
-            last_name=lname,
-            image_url=image)
+# make class method in users
 
-        db.session.add(new_user)
-        db.session.commit()
+
+def create_new_user(fname, lname, image):
+    # fix indentation & docstring
+    new_user = User(
+        first_name=fname,
+        last_name=lname,
+        image_url=image)
+
+    db.session.add(new_user)
+    # this function should not commit. The route should make the commit
+    db.session.commit()
+
 
 @app.get('/')
 def direct_to_users():
@@ -52,8 +58,9 @@ def show_create_user_form():
 def add_user_and_display_user_list():
     """Add a user and return to the /users page."""
 
+    # change response to data or some other name
     response = request.form
-    first_name = response.get('first_name')
+    first_name = response.get('first_name')  # don't need the get, just use []
     last_name = response.get('last_name')
     image_url = response.get('image_url')
 
@@ -74,6 +81,7 @@ def show_selected_user_page(id):
 def show_edit_selected_user_form(id):
     """Show a form to edit the selected user."""
 
+    # get or 404 method to avoid having someone access an invalid id
     user = User.query.get(id)
 
     return render_template('edit_user.html', user=user)
@@ -93,6 +101,8 @@ def update_user_record(id):
     db.session.commit()
 
     return redirect(f'/users/{id}')
+
+# cannot be a get request
 
 
 @app.get('/users/<int:id>/delete')
