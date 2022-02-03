@@ -16,7 +16,7 @@ toolbar = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
-def create_new_user(fname,lname,image)
+def create_new_user(fname,lname,image):
         new_user = User(
             first_name=fname,
             last_name=lname,

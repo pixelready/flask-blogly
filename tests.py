@@ -1,7 +1,7 @@
 from unittest import TestCase
 
-from app import app, create_new_user, db
-from models import DEFAULT_IMAGE_URL, User
+from app import app, db
+from models import User
 
 # Let's configure our app to use a different database for tests
 app.config['DATABASE_URL'] = "postgresql:///blogly_test"
@@ -77,10 +77,27 @@ class UserViewTestCase(TestCase):
 
         with self.client as c:
             post = c.post('/users/new', data={'first_name':first_name,'last_name':last_name, 'image_url':image_url})
-            self.assertEquals(post.status_code, 200)
+            self.assertEquals(post.status_code, 302)
 
-        user = User.query.filter(User.name == 'disguy').first()
+        user = User.query.filter(User.first_name == 'disguy').first()
 
         self.assertIsNotNone(user)
 
-    def test_new_user_detail_page(self):
+    def test_user_detail_page_display(self):
+        """Does the user detail page get displayed?"""
+
+        with self.client as c:
+            resp = c.get(f"users/{self.user_id}")
+            html = resp.get_data(as_text=True)
+            self.assertIn('<h1>test_first', html)
+
+    def test_edit_form_filled(self):
+        """Does the edit page come pre-populated with the user server data?"""
+
+        with self.client as c:
+            resp = c.get(f"users/{self.user_id}/edit")
+            html = resp.get_data(as_text=True)
+            self.assertIn('name="first_name"\n\t\t\tvalue="test_first"', html)
+            self.assertIn('name="last_name"\n\t\t\tvalue="test_last"', html)
+            self.assertIn('name="image_url"\n\t\t\tvalue="None"', html)
+
