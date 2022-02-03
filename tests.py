@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from app import app, db
+from app import app, create_new_user, db
 from models import DEFAULT_IMAGE_URL, User
 
 # Let's configure our app to use a different database for tests
@@ -52,9 +52,35 @@ class UserViewTestCase(TestCase):
         db.session.rollback()
 
     def test_list_users(self):
+        """Does the user list show the test user?"""
         with self.client as c:
             resp = c.get("/users")
             self.assertEqual(resp.status_code, 200)
             html = resp.get_data(as_text=True)
             self.assertIn("test_first", html)
             self.assertIn("test_last", html)
+
+    def test_new_user_form_displays(self):
+        """Does the new user form display from the new user route?"""
+        with self.client as c:
+            resp = c.get("/users/new")
+            self.assertEqual(resp.status_code, 200)
+            html = resp.get_data(as_text=True)
+            self.assertIn('action="/users/new"', html)
+
+    def test_new_user_creation(self):
+        """Does the new user creation route create the user in the db?"""
+
+        first_name = 'disguy'
+        last_name = 'ovahhere'
+        image_url = 'https://2.bp.blogspot.com/-L-0e2jsHy1I/T1Wmt52vCDI/AAAAAAAAC2A/i5fncCyOFSE/s400/dicktracyflattop.jpg'
+
+        with self.client as c:
+            post = c.post('/users/new', data={'first_name':first_name,'last_name':last_name, 'image_url':image_url})
+            self.assertEquals(post.status_code, 200)
+
+        user = User.query.filter(User.name == 'disguy').first()
+
+        self.assertIsNotNone(user)
+
+    def test_new_user_detail_page(self):

@@ -2,7 +2,6 @@
 
 from models import User
 from flask import Flask, redirect, render_template, request
-from flask_sqlalchemy import SQLAlchemy
 from models import db, connect_db
 from flask_debugtoolbar import DebugToolbarExtension
 
@@ -17,6 +16,14 @@ toolbar = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
+def create_new_user(fname,lname,image)
+        new_user = User(
+            first_name=fname,
+            last_name=lname,
+            image_url=image)
+
+        db.session.add(new_user)
+        db.session.commit()
 
 @app.get('/')
 def direct_to_users():
@@ -50,14 +57,7 @@ def add_user_and_display_user_list():
     last_name = response.get('last_name')
     image_url = response.get('image_url')
 
-    new_user = User(
-        first_name=first_name,
-        last_name=last_name,
-        image_url=image_url)
-
-    db.session.add(new_user)
-    db.session.commit()
-
+    create_new_user(first_name, last_name, image_url)
     return redirect('/users')
 
 
