@@ -30,7 +30,6 @@ class UserViewTestCase(TestCase):
         # User model below.
         Post.query.delete()
         User.query.delete()
-        
 
         self.client = app.test_client()
 
@@ -147,11 +146,30 @@ class UserViewTestCase(TestCase):
         """Does the new post form create a new post in the db?"""
 
         with self.client as c:
-            # breakpoint()
+            # TODO why isn't this posting to the DB correctly?
             c.post(
                 f"/users/{self.user_id}/post/new",
                 data={'title': 'abcdef*', 'post_content': 'contentxy'}
             )
-            
-            post = Post.query.filter(Post.title == 'abcdef*')
+
+            breakpoint()
+            post = Post.query.filter(Post.title == 'abcdef*').one()
             self.assertIsNotNone(post)
+
+        with self.client as d:
+            resp = d.get(f"/users/{self.user_id}")
+            html = resp.get_data(as_text=True)
+
+            self.assertIn('abcdef*', html)
+
+    def test_post_edit(self):
+        """Does the edit page update the DB & display correctly"""
+
+        # user = User.query.get(self.user_id)
+        post = Post.query.filter(Post.user_id == self.user_id).first()
+
+        with self.client as c:
+            resp = c.get(f'/posts/{post.id}/edit')
+            html = resp.get_data(as_text=True)
+
+            self.assertIn(post.title, html)

@@ -98,7 +98,9 @@ def update_user_record(id):
 def delete_user_record(id):
     """Delete the user record from the user page"""
 
-    User.query.filter(User.id == id).delete()
+    user = User.query.filter(User.id == id)
+    Post.query.filter(Post.user_id == id).delete()
+    user.delete()
     db.session.commit()
 
     return redirect('/users')
