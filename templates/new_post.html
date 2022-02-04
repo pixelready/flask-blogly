@@ -1,5 +1,7 @@
 {% extends 'base.html' %} {% block htmltitle %}Blogly - Create Post {% endblock
 %} {% block content %}
+
+<!-- Testing for create post page -->
 <h1>Add a post for {{user.first_name}} {{user.last_name}}</h1>
 <form action="/users/{{user.id}}/posts/new" method="post">
     <label class="form-label" for="title">Title</label>

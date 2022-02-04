@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app, db
-from models import User
+from models import User, Post
 
 # Let's configure our app to use a different database for tests
 app.config['DATABASE_URL'] = "postgresql:///blogly_test"
@@ -29,6 +29,7 @@ class UserViewTestCase(TestCase):
         # all of their records before each test just as we're doing with the
         # User model below.
         User.query.delete()
+        Post.query.delete()
 
         self.client = app.test_client()
 
@@ -51,6 +52,21 @@ class UserViewTestCase(TestCase):
         # rely on this user in our tests without needing to know the numeric
         # value of their id, since it will change each time our tests are run.
         self.user_id = test_user.id
+
+        test_user_post1 = Post(
+            title="test_first_post",
+            post_content="content goes here",
+            user_id=self.user_id
+        )
+
+        test_user_post2 = Post(
+            title="test_second_post",
+            post_content="content goes here 2",
+            user_id=self.user_id
+        )
+
+        db.session.add_all([test_user_post1, test_user_post2])
+        db.session.commit()
 
     def tearDown(self):
         """Clean up any fouled transaction."""
@@ -114,3 +130,28 @@ class UserViewTestCase(TestCase):
             self.assertIn('value="test_first"', html)
             self.assertIn('value="test_last"', html)
             self.assertIn('value="None"', html)
+
+    ###### Post Tests ##################################################
+
+    def test_new_post_form_display(self):
+        """Does the new form page display correctly?"""
+
+        with self.client as c:
+            resp = c.get(f"/users/{self.user_id}/posts/new")
+            html = resp.get_data(as_text=True)
+
+            self.assertIn("Testing for create post page", html)
+
+    def test_new_post_creation(self):
+        """Does the new post form create a new post in the db?"""
+
+        with self.client as c:
+            resp = c.post(
+                f"/users/{self.user_id}/post/new",
+                data={'title': 'abcdef*', 'post_content': 'contentxy'},
+                follow_redirects=True
+            )
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 302)
+            self.assertIn("abcdef*", html)
