@@ -121,26 +121,34 @@ def create_post_and_redirect(id):
     form_data = request.form
 
     title = form_data['title']
-    post_content = form_data['post_content']
+    content = form_data['content']
     user_id = id
 
-    Post.create_new_post(title, post_content, user_id)
+    Post.create_new_post(title, content, user_id)
     db.session.commit()
 
     return redirect(f'/users/{id}')
-
 
 @app.get('/posts/<int:id>')
 def show_post(id):
     """Show an individual post"""
 
     post = Post.query.get(id)
+    
+
     return render_template('post_content.html', post=post)
 
+@app.get('/posts/<int:id>/edit')
+def show_edit_post_form(id):
+    """Show the edit post form."""
+
+    post = Post.query.get(id)
+
+    return render_template('edit_post.html', post=post)
 
 @app.post('/posts/<int:id>/edit')
 def edit_post_and_redirect(id):
-    """Edit the selected post and redirect to the selected user detail page"""
+    """Edit a post and redirect to the post page"""
 
     post = Post.query.get(id)
 
@@ -150,4 +158,4 @@ def edit_post_and_redirect(id):
 
     db.session.commit()
 
-    return redirect(f'/user/{post.user_id}')
+    return redirect(f'/posts/{id}')
