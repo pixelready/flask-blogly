@@ -4,7 +4,7 @@ from app import app, db
 from models import User, Post
 
 # Let's configure our app to use a different database for tests
-app.config['DATABASE_URL'] = "postgresql:///blogly_test"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///blogly_test"
 
 # Make Flask errors be real errors, rather than HTML pages with error info
 app.config['TESTING'] = True
@@ -28,8 +28,9 @@ class UserViewTestCase(TestCase):
         # As you add more models later in the exercise, you'll want to delete
         # all of their records before each test just as we're doing with the
         # User model below.
-        User.query.delete()
         Post.query.delete()
+        User.query.delete()
+        
 
         self.client = app.test_client()
 
@@ -146,12 +147,11 @@ class UserViewTestCase(TestCase):
         """Does the new post form create a new post in the db?"""
 
         with self.client as c:
-            resp = c.post(
+            # breakpoint()
+            c.post(
                 f"/users/{self.user_id}/post/new",
-                data={'title': 'abcdef*', 'post_content': 'contentxy'},
-                follow_redirects=True
+                data={'title': 'abcdef*', 'post_content': 'contentxy'}
             )
-            html = resp.get_data(as_text=True)
-
-            self.assertEqual(resp.status_code, 302)
-            self.assertIn("abcdef*", html)
+            
+            post = Post.query.filter(Post.title == 'abcdef*')
+            self.assertIsNotNone(post)
