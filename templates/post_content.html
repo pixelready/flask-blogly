@@ -1,36 +1,32 @@
-{% extends 'base.html' %} {% block htmltitle %} Blogly -
-{{post.author.get_full_name()}} {% endblock %} {%block content %}
-<div class="row">
-	<div class="col-12">
-		<div>
-			<h1>{{post.title}}</h1>
-		</div>
-		<div>
-			<div>{{post.post_content}}</div>
-			<p class="author">
-				<span class="author-name fst-italic"
-					>By {{post.author.get_full_name()}}</span
-				>
-			</p>
-		</div>
-		<div>
-			<form method="post">
-				<a
-					class="btn btn-outline-primary"
-					href="/users/{{post.user_id}}"
-					>Cancel</a
-				>
-				<a class="btn btn-primary" href="/posts/{{post.id}}/edit">
-					Edit
-				</a>
-				<button
-					class="btn btn-danger"
-					formaction="/posts/{{post.id}}/delete"
-				>
-					Delete
-				</button>
-			</form>
-		</div>
-	</div>
-</div>
+{% extends 'base.html' %}
+{% block htmltitle %}
+  Blogly -
+  {{post.author.get_full_name()}}
+{% endblock %}
+{%block content %}
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <h1>{{post.title}}</h1>
+      </div>
+      <div>
+        <div>{{post.post_content}}</div>
+        <p class="author">
+          <span class="author-name fst-italic">By
+            {{post.author.get_full_name()}}</span>
+        </p>
+      </div>
+      <div>
+        <form method="post">
+          <a class="btn btn-outline-primary" href="/users/{{post.user_id}}">Cancel</a>
+          <a class="btn btn-primary" href="/posts/{{post.id}}/edit">
+            Edit
+          </a>
+          <button class="btn btn-danger" formaction="/posts/{{post.id}}/delete">
+            Delete
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock %}

@@ -1,21 +1,23 @@
-{% extends 'base.html' %} {% block htmltitle %}Blogly - Create Post {% endblock
-%} {% block content %}
+{% extends 'base.html' %}
+{% block htmltitle %}Blogly - Create Post
+{% endblock %}
+{% block content %}
 
-<!-- Testing for create post page -->
-<h1>Add a post for {{user.first_name}} {{user.last_name}}</h1>
-<form action="/users/{{user.id}}/posts/new" method="post">
+  <!-- Testing for create post page -->
+  <h1>Add a post for
+    {{user.first_name}}
+    {{user.last_name}}</h1>
+  <form action="/users/{{user.id}}/posts/new" method="post">
     <label class="form-label" for="title">Title</label>
     <div class="input-group mb-3">
-        <input class="form-control" id="title" name="title" />
+      <input class="form-control" id="title" name="title"/>
     </div>
     <label class="form-label" for="post_content">Post Content</label>
     <div class="input-group mb-3">
-        <textarea class="form-control" id="post_content" name="post_content">
-
-        </textarea>
+      <textarea class="form-control" id="post_content" name="post_content"></textarea>
     </div>
 
     <a href="/users/{{user.id}}" class="btn btn-info">Cancel</a>
     <button class="btn btn-success" type="submit">Add</button>
-</form>
+  </form>
 {% endblock %}

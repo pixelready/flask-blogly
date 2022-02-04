@@ -1,24 +1,21 @@
-{% extends 'base.html' %} {% block htmltitle %}Blogly - Edit Post {% endblock %}
+{% extends 'base.html' %}
+{% block htmltitle %}
+  Blogly - Edit Post
+{% endblock %}
 {% block content %}
-<h1>Edit Post</h1>
-<form action="/posts/{{post.id}}/edit" method="post">
-	<label class="form-label" for="title">Title</label>
-	<div class="input-group mb-3">
-		<input
-			class="form-control"
-			id="title"
-			name="title"
-			value="{{post.title}}"
-		/>
-	</div>
-	<label class="form-label" for="post_content">Post Content</label>
-	<div class="input-group mb-3">
-		<textarea class="form-control" id="post_content" name="post_content">
-{{post.post_content}}</textarea
-		>
-	</div>
+  <h1>Edit Post</h1>
+  <form action="/posts/{{post.id}}/edit" method="post">
+    <label class="form-label" for="title">Title</label>
+    <div class="input-group mb-3">
+      <input class="form-control" id="title" name="title" value="{{post.title}}"/>
+    </div>
+    <label class="form-label" for="post_content">Post Content</label>
+    <div class="input-group mb-3">
+      <textarea class="form-control" id="post_content" name="post_content">
+        {{post.post_content}}</textarea>
+    </div>
 
-	<a href="/users/{{post.user_id}}" class="btn btn-info">Cancel</a>
-	<button class="btn btn-success" type="submit">Edit</button>
-</form>
+    <a href="/users/{{post.user_id}}" class="btn btn-info">Cancel</a>
+    <button class="btn btn-success" type="submit">Edit</button>
+  </form>
 {% endblock %}
